@@ -1316,7 +1316,16 @@ wasmer_result_t wasmer_module_instantiate(const wasmer_module_t *module,
 wasmer_result_t wasmer_module_serialize(wasmer_serialized_module_t **serialized_module_out,
                                         const wasmer_module_t *module);
 
-void wasmer_raise_runtime_error(wasmer_instance_t *instance, char *error_ptr, uint16_t len);
+/**
+ * Raises an exception to the rust wasmer engine
+ *
+ * accepts optionally an error_ptr which is a c string
+ * however length must be suppled in len
+ * if either error_ptr == 0 or len is 0 a generic
+ * error is raised instead
+ *
+ */
+void wasmer_raise_runtime_error(char *error_ptr, uint16_t len);
 
 /**
  * Get bytes of the serialized module.

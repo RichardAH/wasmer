@@ -17,6 +17,7 @@ use wasmer::{
     Exports, Extern, Function, Global, ImportObject, Instance, Memory, Module, Table, Val,
 };
 use wasmer_types::{entity::*, ExportIndex, MemoryIndex};
+use wasmer::{RuntimeError};
 
 /// Opaque pointer to an Instance type plus metadata.
 ///
@@ -613,12 +614,16 @@ pub unsafe extern "C" fn wasmer_instance_destroy(instance: Option<NonNull<wasmer
     }
 }
 
-use wasmer::{RuntimeError};
-
+/// Raises an exception to the rust wasmer engine
+///
+/// accepts optionally an error_ptr which is a c string
+/// however length must be suppled in len
+/// if either error_ptr == 0 or len is 0 a generic
+/// error is raised instead
+///
 #[allow(clippy::cast_ptr_alignment)]
 #[no_mangle]
 pub unsafe extern "C" fn wasmer_raise_runtime_error(
-    instance: Option<NonNull<wasmer_instance_t>>,
     error_ptr: *mut c_char,
     len: u16) {
     let size = usize::from(len);
