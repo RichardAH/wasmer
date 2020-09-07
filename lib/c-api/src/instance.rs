@@ -612,3 +612,19 @@ pub unsafe extern "C" fn wasmer_instance_destroy(instance: Option<NonNull<wasmer
         Box::from_raw(instance_inner.cast::<CAPIInstance>().as_ptr());
     }
 }
+
+use wasmer::{RuntimeError};
+
+#[allow(clippy::cast_ptr_alignment)]
+#[no_mangle]
+pub unsafe extern "C" fn wasmer_raise_runtime_error(
+    instance: Option<NonNull<wasmer_instance_t>>,
+    error_ptr: *mut c_char,
+    len: u16) {
+    let size = usize::from(len);
+    if error_ptr.is_null() || len == 0 || len > 256 {
+        RuntimeError::raise(  Box::new( RuntimeError::new( "unspecified runtime error".to_string() ) ) );
+    } else {
+        RuntimeError::raise(  Box::new( RuntimeError::new( String::from_raw_parts(error_ptr as *mut u8, size, size) ) ) );
+    }
+}

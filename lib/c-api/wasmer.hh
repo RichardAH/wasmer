@@ -1091,6 +1091,8 @@ wasmer_result_t wasmer_module_instantiate(const wasmer_module_t *module,
 wasmer_result_t wasmer_module_serialize(wasmer_serialized_module_t **serialized_module_out,
                                         const wasmer_module_t *module);
 
+void wasmer_raise_runtime_error(wasmer_instance_t *instance, char *error_ptr, uint16_t len);
+
 /// Get bytes of the serialized module.
 wasmer_byte_array wasmer_serialized_module_bytes(const wasmer_serialized_module_t *serialized_module);
 
